@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <Title>Fun Page!</Title>
+  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- React -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel for JSX -->
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+
+<div id="root"></div>
+    
+<script type="text/babel">
+
+  function App() {
+  
+    const [number, changeNumber] = React.useState(0);
+    const [flipState, flipSwitch] = React.useState(false);
+
+    const buttonClick = () => {
+        changeNumber(number => number + 1);
+    }
+
+    const switchClick = () => {
+        flipSwitch(flipState => !flipState);
+
+    }
+
+
+
+    return (
+    <div className="page">
+        <div className="title">{number} Clicks</div>
+        <div className="section"> 
+            <div className="vertical-section">
+                <div className="box">
+                    <div className="button" onClick={buttonClick}></div>
+                </div>
+                <div className="box">
+                    <img 
+                      className="on-offSwitch" 
+                      onClick={switchClick}    
+                      src={flipState ? "./onSwitch.png" : "./offSwitch.png"} 
+                      alt="lightSwitch" 
+                    />
+                </div>
+            </div>
+            <div className="vertical-section">
+                <div className="box">3</div>
+                <div className="box">4</div>
+            </div>
+        </div>
+        <div className="submit-button">SUBMIT</div>
+    </div>
+    );}
+
+  const root = ReactDOM.createRoot(document.getElementById("root"));
+  root.render(<App />);
+
+</script>
+</body>
+</html>
