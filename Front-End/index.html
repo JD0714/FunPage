@@ -1,69 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <Title>Fun Page!</Title>
+  <title>Fun Page!</title>
   <link rel="stylesheet" href="style.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- React -->
   <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-
-  <!-- Babel for JSX -->
   <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 </head>
 <body>
-
 <div id="root"></div>
-    
+
 <script type="text/babel">
+function App() {
+  const [number, changeNumber] = React.useState(0);
+  const [flipState, flipSwitch] = React.useState(false);
+  const trackRef = React.useRef(null);
+  const marbleRef = React.useRef(null);
+  const angleRef = React.useRef(-Math.PI / 2);
 
-  function App() {
-  
-    const [number, changeNumber] = React.useState(0);
-    const [flipState, flipSwitch] = React.useState(false);
+  const buttonClick = () => changeNumber(n => n + 1);
+  const switchClick = () => flipSwitch(s => !s);
 
-    const buttonClick = () => {
-        changeNumber(number => number + 1);
-    }
+  React.useEffect(() => {
+    const track = trackRef.current;
+    const marble = marbleRef.current;
+    if (!track || !marble) return;
+    let dragging = false;
 
-    const switchClick = () => {
-        flipSwitch(flipState => !flipState);
+    const getTrackInfo = () => {
+      const rect = track.getBoundingClientRect();
+      const center = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+      const radius = rect.width / 2 - rect.width * 0.03;
+      return { center, radius };
+    };
 
-    }
+    const updateMarble = () => {
+      const rect = track.getBoundingClientRect();
+      const borderWidth = parseFloat(getComputedStyle(track).borderWidth);
+      const center = { x: rect.width / 2, y: rect.height / 2 };
+      const radius = rect.width / 2 - marble.offsetWidth / 2 - borderWidth + 10;
+      const x = center.x + Math.cos(angleRef.current) * radius - marble.offsetWidth / 2;
+      const y = center.y + Math.sin(angleRef.current) * radius - marble.offsetHeight / 2;
+      marble.style.left = `${x}px`;
+      marble.style.top = `${y}px`;
+    };
 
+    updateMarble();
 
+    const onMouseDown = () => { dragging = true; marble.style.cursor = "grabbing"; };
+    const onMouseUp = () => { dragging = false; marble.style.cursor = "grab"; };
+    const onMouseMove = e => {
+      if (!dragging) return;
+      const { center } = getTrackInfo();
+      angleRef.current = Math.atan2(e.clientY - center.y, e.clientX - center.x);
+      updateMarble();
+    };
+    const onResize = () => updateMarble();
 
-    return (
+    marble.addEventListener("mousedown", onMouseDown);
+    document.addEventListener("mouseup", onMouseUp);
+    document.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      marble.removeEventListener("mousedown", onMouseDown);
+      document.removeEventListener("mouseup", onMouseUp);
+      document.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
+
+  return (
     <div className="page">
-        <div className="title">{number} Clicks</div>
-        <div className="section"> 
-            <div className="vertical-section">
-                <div className="box">
-                    <div className="button" onClick={buttonClick}></div>
-                </div>
-                <div className="box">
-                    <img 
-                      className="on-offSwitch" 
-                      onClick={switchClick}    
-                      src={flipState ? "./onSwitch.png" : "./offSwitch.png"} 
-                      alt="lightSwitch" 
-                    />
-                </div>
-            </div>
-            <div className="vertical-section">
-                <div className="box">3</div>
-                <div className="box">4</div>
-            </div>
+      <div className="title">{number} Clicks</div>
+      <div className="section">
+        <div className="vertical-section">
+          <div className="box">
+            <div className="button" onClick={buttonClick}></div>
+          </div>
+          <div className="box">
+            <img
+              className="on-offSwitch"
+              onClick={switchClick}
+              src={flipState ? "./onSwitch.png" : "./offSwitch.png"}
+              alt="lightSwitch"
+            />
+          </div>
         </div>
-        <div className="submit-button">SUBMIT</div>
+        <div className="vertical-section">
+          <div className="box">
+            <div id="track" ref={trackRef}>
+              <div id="marble" ref={marbleRef}></div>
+            </div>
+          </div>
+          <div className="box">4</div>
+        </div>
+      </div>
+      <div className="submit-button">SUBMIT</div>
     </div>
-    );}
+  );
+}
 
-  const root = ReactDOM.createRoot(document.getElementById("root"));
-  root.render(<App />);
-
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
 </script>
 </body>
 </html>

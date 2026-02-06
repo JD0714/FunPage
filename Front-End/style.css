@@ -11,7 +11,7 @@ html, body {
     margin: 0px;
     overflow: hidden;
     user-select: none;
-    background:radial-gradient(#66ff66, #0F4132)
+    background: radial-gradient(#66ff66, #0F4132);
 }
 
 .page {
@@ -33,22 +33,19 @@ html, body {
     flex-direction: row;
     box-shadow: 0 4px 8px 0 #14452F;
     border-radius: 30px;
-    width:60vw;
-    height:60vh;
-    margin: 50px autp 0px auto;
+    width: 60vw;
+    height: 60vh;
     margin: 50px auto 0px auto;
-    background:linear-gradient(135deg, #0F5132, #66ff66, #14452F);
+    background: linear-gradient(135deg, #0F5132, #66ff66, #14452F);
 }
 
 .vertical-section {
-    /*border:red 2px dashed;*/
     height: auto;
-    width:50%;
+    width: 50%;
 }
 
 .box {
-    /*border:blue 2px dotted;*/
-    height:50%;
+    height: 50%;
     width: auto;
     display: flex;
     flex-direction: column;
@@ -61,7 +58,7 @@ html, body {
     height: 50px;
     background-color: #388E3C;
     border: solid black 2px;
-    border-radius: 5px;;
+    border-radius: 5px;
     box-shadow: 0 4px 8px 0 #14452F;
 }
 
@@ -75,7 +72,7 @@ html, body {
 }
 
 .on-offSwitch {
-    width:auto;
+    width: auto;
     height: 95%;
 }
 
@@ -83,12 +80,36 @@ html, body {
     cursor: pointer;
 }
 
+#track {
+    height: 80%;
+    aspect-ratio: 1 / 1;
+    border-radius: 100%;
+    position: relative;
+    background-image: url('raceTrack.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: none;
+}
+
+#marble {
+    height: 30%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    position: absolute;
+    cursor: grab;
+    background-image: url('car.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
 .submit-button {
     margin: auto auto;
     margin-top: 10px;
-    width:100px;
-    height:40px;
-    background-color: #388E3C;;
+    width: 100px;
+    height: 40px;
+    background-color: #388E3C;
     border: solid;
     border-radius: 5px;
     display: flex;
